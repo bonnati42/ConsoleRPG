@@ -1,4 +1,4 @@
-﻿#include "savesystem.h"
+#include "savesystem.h"
 #include <fstream>
 #include <iostream>
 #include <filesystem>
@@ -16,7 +16,9 @@ bool WriteKeyValue(ofstream& file, const string& key, const string& value)
 	else return false;
 }
 
-bool SaveGame(const Character& player, const Character& enemy, const string& filename)
+static void SaveItems(ofstream& file,const vector<Item>& items,const string& p){WriteKeyValue(file,p+".count",to_string(items.size()));for(size_t i=0;i<items.size();++i){WriteKeyValue(file,p+"."+to_string(i)+".name",items[i].name);WriteKeyValue(file,p+"."+to_string(i)+".description",items[i].description);WriteKeyValue(file,p+"."+to_string(i)+".price",to_string(items[i].price));WriteKeyValue(file,p+"."+to_string(i)+".quantity",to_string(items[i].quantity));}}
+
+bool SaveGame(const Character& player, const Character& enemy,const Shop& shop, const string& filename)
 {
 	filesystem::create_directory("saves");
 	ofstream file;
@@ -38,6 +40,8 @@ bool SaveGame(const Character& player, const Character& enemy, const string& fil
 		WriteKeyValue(file, "player.gold", to_string(player.gold));
 		WriteKeyValue(file, "player.stats.armorClass", to_string(player.characteristics.armorClass));
 
+		SaveItems(file, player.inventory, "player.inventory");
+
 		// Враг
 		WriteKeyValue(file, "enemy.name", enemy.name);
 		WriteKeyValue(file, "enemy.health", to_string(enemy.health));
@@ -48,6 +52,8 @@ bool SaveGame(const Character& player, const Character& enemy, const string& fil
 		WriteKeyValue(file, "enemy.gold", to_string(enemy.gold));
 		WriteKeyValue(file, "enemy.stats.armorClass", to_string(enemy.characteristics.armorClass));
 
+		WriteKeyValue(file,"shop.name",shop.name);
+		SaveItems(file,shop.availableItems,"shop.items");
 		file.close();
 		cout << "Игра успешно сохранена! \\(@^0^@)/" << endl;
 		return true;
@@ -84,7 +90,9 @@ bool LoadGame(Character& player, Character& enemy, const string& filename)
 	}
 
 	cout << "Сохранение успешно загружено!" << endl;
-	file.close();
+	WriteKeyValue(file,"shop.name",shop.name);
+		SaveItems(file,shop.availableItems,"shop.items");
+		file.close();
 	return true;
 }
 
@@ -92,6 +100,8 @@ bool SaveExists(const string& filename)
 {
 	ifstream file(filename);
 	bool saveExists = bool(file);
-	file.close();
+	WriteKeyValue(file,"shop.name",shop.name);
+		SaveItems(file,shop.availableItems,"shop.items");
+		file.close();
 	return saveExists;
 }
