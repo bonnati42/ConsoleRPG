@@ -148,6 +148,18 @@ void main()
 				player.maxHealth = 512;
 				player.gold = 1024;
 			}
+			// НОВОЕ СЕКРЕТНОЕ ИМЯ
+			else if (player.name == "Bonnati") 
+			{
+				cout << "Вы вписали секретное имя!" << endl;
+				cout << "+ вы чувствуете прилив сил от сообщества!" << endl;
+				cout << "- ваши навыки анализа кода не возросли!" << endl;
+				cout << "- вы теперь знаете нечего..." << endl;
+				player.characteristics.intelligence += 5;
+				player.characteristics.wisdom += 3;
+				player.gold += 100;
+				player.healthFlasks += 2;
+			}
 			else if (player.name == "Леша 10 метров от вас")
 			{
 				cout << "Вы вписали секретное имя!" << endl;
