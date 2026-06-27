@@ -9,85 +9,105 @@
 #include "user_interface.h"
 using namespace std;
 
-// В структуре character находятся все характеристики + описание перса
-// Это редактируется в отдельном файле редакторе персонажа
+struct Character;
 
-// 1. Игрок распределяет сам статы - делаем. 8, 10, 12, 13, 14, 15
-// 2. Программа бросает кубик на характеристики
+// ---------- State Pattern ----------
+class CharacterState
+{
+public:
+    virtual ~CharacterState() = default;
+    virtual void HandleAction(Character& character, Character& other) = 0;
+    virtual void HandleChangeState(Character& character);
+};
 
-// При внедрении классов необходимо определять тип куба и модификатора, используемого при атаке
+class BasicAttackState : public CharacterState
+{
+public:
+    void HandleAction(Character& character, Character& other) override;
+};
+
+class SpecialAttackState : public CharacterState
+{
+public:
+    void HandleAction(Character& character, Character& other) override;
+};
+
+class InventoryState : public CharacterState
+{
+public:
+    void HandleAction(Character& character, Character& other) override;
+};
+
+class HealState : public CharacterState
+{
+public:
+    void HandleAction(Character& character, Character& other) override;
+};
+
+class FleeState : public CharacterState
+{
+public:
+    void HandleAction(Character& character, Character& other) override;
+};
+
+class CharacterContext
+{
+private:
+    CharacterState* state;
+public:
+    CharacterContext();
+    void SetState(CharacterState* newState);
+    void Execute(Character& character, Character& other);
+};
 
 struct Characteristics
 {
-	int strength;
-	int dexterity;
-	int constitution;
-	int wisdom;
-	int intelligence;
-	int charisma;
-	int armorClass;
-
-	Characteristics();
-	Characteristics(int _strength, int dexterity, int constitution, int wisdom, int intelligence, int charisma, int armorClass);
-	int CountModificator(int characteristic);
-	void PrintCharacteristics();
+    int strength, dexterity, constitution, wisdom, intelligence, charisma, armorClass;
+    Characteristics();
+    Characteristics(int,int,int,int,int,int,int);
+    int CountModificator(int characteristic);
+    void PrintCharacteristics();
 };
 
-// Спрайты персонажей находятся в файлах
-// LoadSprite(enum state)
-struct VisualsASCII
-{
-	void ShowSprite()
-	{
-		
-	}
-};
-  
 struct Appearance
 {
-	string skinColor;
-	string hairColor;
+    string skinColor;
+    string hairColor;
 };
 
 struct Character
 {
-	string name;
-	Appearance appearance;
+    string name;
+    Appearance appearance;
 
-	int health;
-	int maxHealth;
-	int healthFlasks;
+    int health, maxHealth, healthFlasks;
+    int damageFace, specialCooldown;
+    int gold;
 
-	int damageFace;
-	int specialCooldown;
+    vector<Item> inventory;
+    Characteristics characteristics;
 
-	int gold;
+    int uniqueAbilityDifficulty;
+    bool minionSpawned = false;
+    Character* minion = nullptr;
 
-	vector<Item> inventory;
+    Character();
+    Character(string,int,int,int,int,Character&,int);
+    Character(string,int,int,int,int);
 
-	Characteristics characteristics;
+    void PrintStatus();
+    void RemoveGold(int amount);
+    void AddGold(int amount);
+    bool BuyItem(int cost);
 
-	int uniqueAbilityDifficulty;
-	bool minionSpawned = false;
-	Character* minion = nullptr;
-
-	VisualsASCII visualsASCII;
-
-	Character();
-	Character(string _name, int _health, int _damageFace, int _specialCooldown, int _startGold, Character& _minion, int _uniqueAbilityDifficulty);
-	Character(string _name, int _health, int _damageFace, int _specialCooldown, int _startGold);
-	void PrintStatus();
-	void RemoveGold(int amount);
-	void AddGold(int amount);
-	bool BuyItem(int cost);
-	void BasicAttack(Character& other);
-	void SpecialAttack();
-	void ShowInventory();
-	void IncreaseHealth(int amount);
-	void DecreaseHealth(int amount);
-	void Heal(int difficulty);
-	bool Flee(Character& other);
-	bool CheckFleeSuccess(int difficulty);
+    void BasicAttack(Character& other);
+    void SpecialAttack();
+    void ShowInventory();
+    void IncreaseHealth(int amount);
+    void DecreaseHealth(int amount);
+    void Heal(int difficulty);
+    bool Flee(Character& other);
+    bool CheckFleeSuccess(int difficulty);
 };
 
 #endif
