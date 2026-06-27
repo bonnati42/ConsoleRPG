@@ -6,6 +6,61 @@
 #include "character.h"
 #include <cmath>
 
+// ======================================================
+// Character States
+// ======================================================
+
+void CharacterState::HandleChangeState(Character& character)
+{
+}
+
+CharacterContext::CharacterContext()
+{
+    state = nullptr;
+}
+
+void CharacterContext::SetState(CharacterState* newState)
+{
+    state = newState;
+}
+
+void CharacterContext::Execute(Character& character, Character& other)
+{
+    if (state)
+    {
+        state->HandleAction(character, other);
+    }
+}
+
+void BasicAttackState::HandleAction(Character& character, Character& other)
+{
+    character.BasicAttack(other);
+}
+
+void SpecialAttackState::HandleAction(Character& character, Character& other)
+{
+    character.SpecialAttack();
+}
+
+void InventoryState::HandleAction(Character& character, Character& other)
+{
+    character.ShowInventory();
+}
+
+void HealState::HandleAction(Character& character, Character& other)
+{
+    character.Heal(10);
+}
+
+void FleeState::HandleAction(Character& character, Character& other)
+{
+    character.Flee(other);
+}
+
+// ======================================================
+
+
+
 // -------- Characteristics
 
 Characteristics::Characteristics() : strength(15), dexterity(14), constitution(13), wisdom(12), intelligence(10), charisma(8), armorClass(12) {}
