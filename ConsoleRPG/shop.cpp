@@ -12,7 +12,7 @@ Shop::Shop(Character& _player, vector<Item>& _availableItems, string _name) : av
 bool Shop::ShowItems()
 {
 	system("cls");
-	cout << "Äîáðî ïîæàëîâàòü â ìàãàçèí " << name << "!" << endl;
+	cout << "Ð”Ð¾Ð±Ñ€Ð¾ Ð¿Ð¾Ð¶Ð°Ð»Ð¾Ð²Ð°Ñ‚ÑŒ Ð² Ð¼Ð°Ð³Ð°Ð·Ð¸Ð½ " << name << "!" << endl;
 	int userInput;
 	do
 	{
@@ -22,9 +22,9 @@ bool Shop::ShowItems()
 		{
 			cout << i << ". " << availableItems[i - 1].name << "." << endl;
 		}
-		cout << endl << "Ó èãðîêà äåíÿê: " << player.gold << endl;
+		cout << endl << "Ð£ Ð¸Ð³Ñ€Ð¾ÐºÐ° Ð´ÐµÐ½ÑÐº: " << player.gold << endl;
 
-		cout << endl << "Ââåäèòå íîìåð ïðåäìåòà äëÿ åãî îñìîòðà (èëè '0' äëÿ âûõîäà): " << endl;
+		cout << endl << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð¾Ð¼ÐµÑ€ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ð° Ð´Ð»Ñ ÐµÐ³Ð¾ Ð¾ÑÐ¼Ð¾Ñ‚Ñ€Ð° (Ð¸Ð»Ð¸ '0' Ð´Ð»Ñ Ð²Ñ‹Ñ…Ð¾Ð´Ð°): " << endl;
 		cin >> userInput;
 
 		if (userInput == 1301)
@@ -37,22 +37,22 @@ bool Shop::ShowItems()
 		{
 			system("cls");
 			availableItems[userInput - 1].ShowInfo();
-			cout << endl << "Ó èãðîêà äåíÿê: " << player.gold << endl;
+			cout << endl << "Ð£ Ð¸Ð³Ñ€Ð¾ÐºÐ° Ð´ÐµÐ½ÑÐº: " << player.gold << endl;
 			Item& chosenItem = availableItems[userInput - 1];
-			cout << endl << "Ââåäèòå 1 äëÿ ïîêóïêè ïðåäìåòà (èëè '0' äëÿ âûõîäà): " << endl;
+			cout << endl << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ 1 Ð´Ð»Ñ Ð¿Ð¾ÐºÑƒÐ¿ÐºÐ¸ Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚Ð° (Ð¸Ð»Ð¸ '0' Ð´Ð»Ñ Ð²Ñ‹Ñ…Ð¾Ð´Ð°): " << endl;
 			int nestedUserInput;
 			cin >> nestedUserInput;
 			if (nestedUserInput == 1)
 			{
 				if (player.gold < chosenItem.price)
 				{
-					cout << "Íåò äåíÿê!" << endl;
+					cout << "ÐÐµÑ‚ Ð´ÐµÐ½ÑÐº!" << endl;
 					continue;
 				}
 
 				player.gold -= chosenItem.price;
 				player.inventory.push_back(chosenItem);
-				cout << endl << "Ó èãðîêà äåíÿê: " << player.gold << endl;
+				cout << endl << "Ð£ Ð¸Ð³Ñ€Ð¾ÐºÐ° Ð´ÐµÐ½ÑÐº: " << player.gold << endl;
 				cout << endl;
 
 				chosenItem.quantity -= 1;
